@@ -9,7 +9,9 @@
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
-
+@property (nonatomic,strong) UITabBarController * tabBarController;
+@property (nonatomic,strong) UIImageView * tabBarbg;
+@property (nonatomic,assign) int flag;
 @end
 
 @implementation AppDelegate
@@ -20,9 +22,91 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    CGFloat a = MUT_HEIGHT;
+    
+    _flag = 0;
+    
+    _tabBarController = [[UITabBarController alloc] init];
+    HomePageViewController * hvc = [[HomePageViewController alloc] init];
+    UINavigationController * nvc1 = [[UINavigationController alloc] initWithRootViewController:hvc];
+    hvc.delegate = self;
+    
+    ShopViewController * svc = [[ShopViewController alloc] init];
+    UINavigationController * nvc2 = [[UINavigationController alloc] initWithRootViewController:svc];
+    
+    NewsViewController * nvc = [[NewsViewController alloc] init];
+    UINavigationController * nvc3 = [[UINavigationController alloc] initWithRootViewController:nvc];
+    
+    ShoppingtrolleyViewController * stvc = [[ShoppingtrolleyViewController alloc] init];
+    UINavigationController * nvc4 = [[UINavigationController alloc]initWithRootViewController:stvc];
+    
+    CenterViewController * cvc = [[CenterViewController alloc] init];
+    UINavigationController * nvc5 = [[UINavigationController alloc] initWithRootViewController:cvc];
+    
+    _tabBarController.tabBar.hidden = YES;
+    _tabBarController.viewControllers =@[nvc1,nvc2,nvc3,nvc4,nvc5];
+    self.window.rootViewController = _tabBarController;
+    
+    _tabBarbg = [[UIImageView alloc] initWithFrame:CGRectMake(0,HEIGHT-40*a,WIDTH,40*a)];
+    _tabBarbg.tag = 1001;
+    _tabBarbg.image = [UIImage imageNamed:@"2015001.png"];
+    [self.window addSubview:_tabBarbg];
+    _tabBarbg.userInteractionEnabled = YES;
+    NSArray * arr = @[@"首页",@"开店",@"消息",@"购物车",@"掌柜中心"];
+    for (int i=0;i<arr.count;i++) {
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame =CGRectMake(WIDTH/5*i+18*a,5*a,25*a,20*a);
+        [button setTitle:arr[i] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"%d-1.png",i+1]] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"%d-2.png",i+1] ]forState:UIControlStateSelected];
+        button.tag =100+i;
+        [_tabBarbg addSubview:button];
+        
+        if(i==4){
+            button.titleEdgeInsets=UIEdgeInsetsMake(35*a,-10*a,0
+                                                    ,-10*a);
+        }else if (i==3){
+           button.titleEdgeInsets=UIEdgeInsetsMake(35*a,-8*a,0
+                                                    ,-10*a);
+        }
+        else{
+            button.titleEdgeInsets=UIEdgeInsetsMake(35*a,0,0
+                                                    , 0);
+        }
+        button.titleLabel.font = [UIFont systemFontOfSize:10*a];
+        [button setTitleColor:[UIColor colorWithRed:255/255.0 green:80/255.0 blue:0/255.0 alpha:1] forState:UIControlStateSelected];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(buttonAtion:) forControlEvents:UIControlEventTouchUpInside];
+        if (button.tag ==100) {
+            button.selected =YES;
+            
+        }
+        
+    }
+
     return YES;
 }
-
+-(void)buttonAtion:(UIButton*)button{
+    
+    for (int i =0;i<5;i++) {
+        UIButton * button1 = (UIButton*)[_tabBarbg viewWithTag:100+i];
+        button1.selected =NO;
+        button1.userInteractionEnabled = YES;
+    }
+    button.selected=YES;
+    if (button.selected==YES) {
+        button.userInteractionEnabled = NO;
+    }
+    _tabBarController.selectedIndex =button.tag-100;
+    
+}
+-(void)hiddenButton{
+    _tabBarbg.hidden = YES;
+}
+-(void)showButton{
+    _tabBarbg.hidden = NO;
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -75,9 +159,10 @@
     }
     
     // Create the coordinator and store
-    
+    NSLog(@"11");
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"__.sqlite"];
+    NSLog(@"%@",storeURL);
     NSError *error = nil;
     NSString *failureReason = @"There was an error creating or loading the application's saved data.";
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {

@@ -1,0 +1,49 @@
+//
+//  PrefixHeader.pch
+//  掌柜
+//
+//  Created by yubing on 16/10/31.
+//  Copyright © 2016年 yubing. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "AFNetworking.h"
+#import "UIKit+AFNetworking.h"
+#import "Masonry.h"
+#import "NetWorkingManager.h"
+#import "ParseManager.h"
+#import "ProgressHUD.h"
+#import "UIImageView+WebCache.h"
+#import "AppDelegate.h"
+#import "GoodsListModel.h"
+#import "FMDatabase.h"
+#import "DataBaseManager.h"
+#import "SearchModel.h"
+#import "MJRefresh.h"
+//宏
+
+//视图控制器
+#import "HomePageViewController.h"
+#import "LoginViewController.h"
+#import "ShopViewController.h"
+#import "ShoppingtrolleyViewController.h"
+#import "NewsViewController.h"
+#import "CenterViewController.h"
+#import "DetailViewController.h"
+
+//model
+#import "DetailModel.h"
+#import "GoodsListModel.h"
+#import "SearchModel.h"
+
+#define WIDTH  [UIScreen mainScreen].bounds.size.width
+#define HEIGHT [UIScreen mainScreen].bounds.size.height
+#define MUT_WIDTH [UIScreen mainScreen].bounds.size.width/320
+#define MUT_HEIGHT [UIScreen mainScreen].bounds.size.height/568
+#define color(r,g,b,al) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:al]
+#endif /* PrefixHeader_pch */
